@@ -7,32 +7,30 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-- name: Set up JDK 17
-  uses: actions/setup-java@v4
-  with:
-    distribution: temurin
-    java-version: '17'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-- name: Build with Maven
-  run: mvn -B -DskipTests package
+      - name: Build with Maven
+        run: mvn -B -DskipTests package
 
-- name: Prepare Docker context (copy jar)
-  run: |
-    mkdir -p app
-    cp target/*.jar app/app.jar
+      - name: Prepare Docker context (copy jar)
+        run: |
+          mkdir -p app
+          cp target/*.jar app/app.jar
 
-- name: Build Docker image
-  uses: docker/build-push-action@v4
-  with:
-    context: .
-    file: ./Dockerfile
-    push: false
-    tags: ghcr.io/${{ github.repository_owner }}/myapp:latest
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: ghcr.io/${{ github.repository_owner }}/myapp:latest
